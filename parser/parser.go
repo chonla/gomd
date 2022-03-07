@@ -69,7 +69,7 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			}
 
 			// Thematic Breaks
-			hr := str.Str(l.Without(" "))
+			hr := str.Str(l.Without(" ", "\t"))
 			if hr.IsLike(`^\*{3,}$`) || hr.IsLike(`^_{3,}$`) || hr.IsLike(`^-{3,}$`) {
 				if textCarriedOver != "" {
 					mdDoc.Push((element.P{

@@ -1,5 +1,7 @@
 # gomd - Markdown Parser
 
+Markdown parser library fo Golang.
+
 ## TODO List
 
 * Leaf Blocks
@@ -15,3 +17,7 @@
     * ~~Paragraph Parsing~~
     * Code block Parsing
     * Bullets Parsing
+
+## References
+
+* https://spec.commonmark.org/

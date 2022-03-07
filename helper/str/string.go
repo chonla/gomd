@@ -67,10 +67,14 @@ func (s Str) Trim() string {
 }
 
 // Without
-// Remove p from string.
-func (s Str) Without(p string) string {
+// Remove p from string. If others is provided, remove others too.
+func (s Str) Without(p string, others ...string) string {
 	str := string(s)
-	return strings.ReplaceAll(str, p, "")
+	result := strings.ReplaceAll(str, p, "")
+	for _, other := range others {
+		result = strings.ReplaceAll(result, other, "")
+	}
+	return result
 }
 
 // Capture

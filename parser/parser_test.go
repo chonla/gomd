@@ -8,6 +8,104 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParsingThematicBreaks(t *testing.T) {
+	docs := []string{
+		`***`,
+		`---`,
+		`___`,
+		` ***`,                                  // one-leading space
+		`  ***`,                                 // two-leading spaces
+		`   ***`,                                // three-leading spaces
+		`_____________________________________`, // More than 3 characters break
+		` - - -`,                                // Inner spaces
+		"\t-\t-\t-",                             // Inner tabs
+		" **  * ** * ** * **",                   // Inner spaces
+		"-       -       -      -",              // Inner spaces
+		"- - - -     ",                          // Spaces at the end
+		"- - - -\t\t\t\t",                       // Tabs at the end
+	}
+	expected := &element.Doc{
+		Nodes: []element.Element{
+			element.Hr{},
+		},
+	}
+	p := parser.New()
+
+	for _, doc := range docs {
+		result, err := p.Parse(doc)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
+	}
+}
+
+func TestParsingNonThematicBreaks(t *testing.T) {
+	docs := []string{
+		`+++`,
+		`===`,
+		`--`,
+		`**`,
+		`__`,
+		// `    ---`,  // TODO: Code block
+		// "Foo\n    ***", // TODO: More-than-3-spaces thematic break
+	}
+	expected := []*element.Doc{
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "+++",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "===",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "--",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "**",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "__",
+				},
+			},
+		},
+		// TODO: Codeblock expectation
+		// {Codeblock}
+		// TODO: More-than-3-spaces thematic break
+		// {
+		// 	Nodes: []element.Element{
+		// 		element.P{
+		// 			Value: "Foo\n***",
+		// 		},
+		// 	},
+		// },
+	}
+	p := parser.New()
+
+	for index, doc := range docs {
+		result, err := p.Parse(doc)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expected[index], result)
+	}
+}
+
 func TestParseDocumentContainingOnlyH1Element(t *testing.T) {
 	doc := `# Header`
 	expected := &element.Doc{

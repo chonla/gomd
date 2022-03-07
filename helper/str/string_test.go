@@ -150,6 +150,24 @@ func TestTrim(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
+func TestWithout(t *testing.T) {
+	text := "simple text"
+	expected := "simple ex"
+
+	result := Str(text).Without("t")
+
+	assert.Equal(t, expected, result)
+}
+
+func TestMultipleWithout(t *testing.T) {
+	text := "simple text"
+	expected := "sipl x"
+
+	result := Str(text).Without("t", "m", "e")
+
+	assert.Equal(t, expected, result)
+}
+
 func TestCaptureMatch(t *testing.T) {
 	text := "simple text"
 	expected := "text"
