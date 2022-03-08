@@ -1,6 +1,7 @@
-package str
+package str_test
 
 import (
+	"gomd/helper/str"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -8,78 +9,78 @@ import (
 
 func TestCreatingLinesFromLinuxBasedString(t *testing.T) {
 	text := "simple text\nwith new line"
-	expected := []string{
-		"simple text",
-		"with new line",
+	expected := []str.Str{
+		str.Str("simple text"),
+		str.Str("with new line"),
 	}
 
-	result := Str(text).Lines()
+	result := str.Str(text).Lines()
 
 	assert.Equal(t, expected, result)
 }
 
 func TestCreatingLinesFromWindowsBasedString(t *testing.T) {
 	text := "simple text\r\nwith new line"
-	expected := []string{
-		"simple text",
-		"with new line",
+	expected := []str.Str{
+		str.Str("simple text"),
+		str.Str("with new line"),
 	}
 
-	result := Str(text).Lines()
+	result := str.Str(text).Lines()
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFirstNCharactersOfString(t *testing.T) {
 	text := "simple text"
-	expected := "simp"
+	expected := str.Str("simp")
 
-	result := Str(text).First(4)
+	result := str.Str(text).First(4)
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFirstNCharactersOfStringWithNOfSameStringSize(t *testing.T) {
 	text := "simple text"
-	expected := "simple text"
+	expected := str.Str("simple text")
 
-	result := Str(text).First(11)
+	result := str.Str(text).First(11)
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFirstNCharactersOfStringWithNOfBiggerThanStringSize(t *testing.T) {
 	text := "simple text"
-	expected := "simple text"
+	expected := str.Str("simple text")
 
-	result := Str(text).First(12)
+	result := str.Str(text).First(12)
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFromNCharactersOfString(t *testing.T) {
 	text := "simple text"
-	expected := "le text"
+	expected := str.Str("le text")
 
-	result := Str(text).From(4)
+	result := str.Str(text).From(4)
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFromNCharactersOfStringFromTheBegining(t *testing.T) {
 	text := "simple text"
-	expected := "simple text"
+	expected := str.Str("simple text")
 
-	result := Str(text).From(0)
+	result := str.Str(text).From(0)
 
 	assert.Equal(t, expected, result)
 }
 
 func TestGetFromNCharactersOfStringFromSomewhereFarFromStringSize(t *testing.T) {
 	text := "simple text"
-	expected := ""
+	expected := str.Str("")
 
-	result := Str(text).From(11)
+	result := str.Str(text).From(11)
 
 	assert.Equal(t, expected, result)
 }
@@ -87,7 +88,7 @@ func TestGetFromNCharactersOfStringFromSomewhereFarFromStringSize(t *testing.T) 
 func TestBlankLineWithEmptyString(t *testing.T) {
 	text := ""
 
-	result := Str(text).IsBlank()
+	result := str.Str(text).IsBlank()
 
 	assert.True(t, result)
 }
@@ -95,7 +96,7 @@ func TestBlankLineWithEmptyString(t *testing.T) {
 func TestBlankLineWithSpaceLine(t *testing.T) {
 	text := "     "
 
-	result := Str(text).IsBlank()
+	result := str.Str(text).IsBlank()
 
 	assert.True(t, result)
 }
@@ -103,7 +104,7 @@ func TestBlankLineWithSpaceLine(t *testing.T) {
 func TestBlankLineWithTabLine(t *testing.T) {
 	text := "\t"
 
-	result := Str(text).IsBlank()
+	result := str.Str(text).IsBlank()
 
 	assert.True(t, result)
 }
@@ -111,7 +112,7 @@ func TestBlankLineWithTabLine(t *testing.T) {
 func TestBlankLineWithNonBlankLine(t *testing.T) {
 	text := "simple text"
 
-	result := Str(text).IsBlank()
+	result := str.Str(text).IsBlank()
 
 	assert.False(t, result)
 }
@@ -119,7 +120,7 @@ func TestBlankLineWithNonBlankLine(t *testing.T) {
 func TestBlankLineWithNonBlankLineStartingWithSpace(t *testing.T) {
 	text := " simple text"
 
-	result := Str(text).IsBlank()
+	result := str.Str(text).IsBlank()
 
 	assert.False(t, result)
 }
@@ -127,7 +128,7 @@ func TestBlankLineWithNonBlankLineStartingWithSpace(t *testing.T) {
 func TestMatchPatternWithRegularExpression(t *testing.T) {
 	text := "==="
 
-	result := Str(text).IsLike(`^={3}$`)
+	result := str.Str(text).IsLike(`^={3}$`)
 
 	assert.True(t, result)
 }
@@ -136,61 +137,91 @@ func TestStringValue(t *testing.T) {
 	text := "simple text"
 	expected := "simple text"
 
-	result := Str(text).String()
+	result := str.Str(text).String()
 
 	assert.Equal(t, expected, result)
 }
 
 func TestTrim(t *testing.T) {
 	text := "  simple text  "
-	expected := "simple text"
+	expected := str.Str("simple text")
 
-	result := Str(text).Trim()
+	result := str.Str(text).Trim()
 
 	assert.Equal(t, expected, result)
 }
 
 func TestWithout(t *testing.T) {
 	text := "simple text"
-	expected := "simple ex"
+	expected := str.Str("simple ex")
 
-	result := Str(text).Without("t")
+	result := str.Str(text).Without("t")
 
 	assert.Equal(t, expected, result)
 }
 
 func TestMultipleWithout(t *testing.T) {
 	text := "simple text"
-	expected := "sipl x"
+	expected := str.Str("sipl x")
 
-	result := Str(text).Without("t", "m", "e")
+	result := str.Str(text).Without("t", "m", "e")
 
 	assert.Equal(t, expected, result)
 }
 
 func TestCaptureMatch(t *testing.T) {
 	text := "simple text"
-	expected := "text"
+	expected := str.Str("text")
 
-	result := Str(text).Capture("(t..t)")
+	result := str.Str(text).Capture("(t..t)")
 
 	assert.Equal(t, expected, result)
 }
 
 func TestCaptureUnmatch(t *testing.T) {
 	text := "simple text"
-	expected := ""
+	expected := str.Str("")
 
-	result := Str(text).Capture("(t.st)")
+	result := str.Str(text).Capture("(t.st)")
 
 	assert.Equal(t, expected, result)
 }
 
 func TestMultipleCaptureMatch(t *testing.T) {
 	text := "simple text"
-	expected := "ple"
+	expected := str.Str("ple")
 
-	result := Str(text).Capture("(.l.) (t..t)")
+	result := str.Str(text).Capture("(.l.) (t..t)")
 
 	assert.Equal(t, expected, result)
+}
+
+func TestAppendString(t *testing.T) {
+	text := "simple"
+	expected := str.Str("simple text")
+
+	result := str.Str(text).Append(str.Str(" text"))
+
+	assert.Equal(t, expected, result)
+}
+
+func TestEmpty(t *testing.T) {
+	text := "simple"
+	expected := str.Str("")
+
+	result := str.Str(text).Empty()
+
+	assert.Equal(t, expected, result)
+}
+
+func TestIsEmpty(t *testing.T) {
+	text := str.Str("")
+
+	assert.True(t, text.IsEmpty())
+}
+
+func TestNotIsEmpty(t *testing.T) {
+	text := str.Str("simple text")
+
+	assert.False(t, text.IsEmpty())
 }

@@ -15,7 +15,7 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 	lines := str.Str(doc).Lines()
 	multilineProcess := false
 	mdDoc := element.NewDoc()
-	textCarriedOver := ""
+	textCarriedOver := str.Str("")
 
 	for _, line := range lines {
 		if multilineProcess {
@@ -24,11 +24,11 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			l := str.Str(line)
 
 			if l.IsBlank() {
-				if textCarriedOver != "" {
+				if !textCarriedOver.IsEmpty() {
 					mdDoc.Push(element.P{
-						Value: textCarriedOver,
+						Value: textCarriedOver.String(),
 					})
-					textCarriedOver = ""
+					textCarriedOver = textCarriedOver.Empty()
 				}
 				continue
 			}
@@ -36,18 +36,18 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			// Code Block
 			if l.IsLike(`^ {0,3}\t`) || l.IsLike(`^ {4,}`) {
 				mdDoc.Push(element.CodeBlock{
-					Value: l.Trim(),
+					Value: l.Trim().String(),
 				})
 				continue
 			}
 
 			// Setext H1
 			if l.IsLike(`^=+$`) {
-				if textCarriedOver != "" {
+				if !textCarriedOver.IsEmpty() {
 					mdDoc.Push(element.H1{
-						Value: textCarriedOver,
+						Value: textCarriedOver.String(),
 					})
-					textCarriedOver = ""
+					textCarriedOver = textCarriedOver.Empty()
 				} else {
 					mdDoc.Push(element.P{
 						Value: l.String(),
@@ -58,11 +58,11 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 
 			// Setext H2
 			if l.IsLike(`^-+$`) {
-				if textCarriedOver != "" {
+				if !textCarriedOver.IsEmpty() {
 					mdDoc.Push(element.H2{
-						Value: textCarriedOver,
+						Value: textCarriedOver.String(),
 					})
-					textCarriedOver = ""
+					textCarriedOver = textCarriedOver.Empty()
 				} else {
 					if l.IsLike(`^-{3,}$`) {
 						mdDoc.Push(element.Hr{})
@@ -79,11 +79,11 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			// Thematic Breaks
 			hr := str.Str(l.Without(" ", "\t"))
 			if hr.IsLike(`^\*{3,}$`) || hr.IsLike(`^_{3,}$`) || hr.IsLike(`^-{3,}$`) {
-				if textCarriedOver != "" {
+				if !textCarriedOver.IsEmpty() {
 					mdDoc.Push(element.P{
-						Value: textCarriedOver,
+						Value: textCarriedOver.String(),
 					})
-					textCarriedOver = ""
+					textCarriedOver = textCarriedOver.Empty()
 				}
 				mdDoc.Push(element.Hr{})
 				continue
@@ -91,49 +91,49 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 
 			if l.IsLike(`^ {0,3}# `) {
 				mdDoc.Push(element.H1{
-					Value: l.Capture(`^ {0,3}# (.*)`),
+					Value: l.Capture(`^ {0,3}# (.*)$`).Trim().String(),
 				})
 				continue
 			}
 			if l.IsLike(`^ {0,3}## `) {
 				mdDoc.Push(element.H2{
-					Value: l.Capture(`^ {0,3}## (.*)`),
+					Value: l.Capture(`^ {0,3}## (.*)$`).Trim().String(),
 				})
 				continue
 			}
 			if l.IsLike(`^ {0,3}### `) {
 				mdDoc.Push(element.H3{
-					Value: l.Capture(`^ {0,3}### (.*)`),
+					Value: l.Capture(`^ {0,3}### (.*)$`).Trim().String(),
 				})
 				continue
 			}
 			if l.IsLike(`^ {0,3}#### `) {
 				mdDoc.Push(element.H4{
-					Value: l.Capture(`^ {0,3}#### (.*)`),
+					Value: l.Capture(`^ {0,3}#### (.*)$`).Trim().String(),
 				})
 				continue
 			}
 			if l.IsLike(`^ {0,3}##### `) {
 				mdDoc.Push(element.H5{
-					Value: l.Capture(`^ {0,3}##### (.*)`),
+					Value: l.Capture(`^ {0,3}##### (.*)$`).Trim().String(),
 				})
 				continue
 			}
 			if l.IsLike(`^ {0,3}###### `) {
 				mdDoc.Push(element.H6{
-					Value: l.Capture(`^ {0,3}###### (.*)`),
+					Value: l.Capture(`^ {0,3}###### (.*)$`).Trim().String(),
 				})
 				continue
 			}
-			if textCarriedOver != "" {
-				textCarriedOver += " "
+			if !textCarriedOver.IsEmpty() {
+				textCarriedOver = textCarriedOver.Append(str.Str(" "))
 			}
-			textCarriedOver += line
+			textCarriedOver = textCarriedOver.Append(line)
 		}
 	}
-	if textCarriedOver != "" {
+	if !textCarriedOver.IsEmpty() {
 		mdDoc.Push(element.P{
-			Value: textCarriedOver,
+			Value: textCarriedOver.String(),
 		})
 	}
 

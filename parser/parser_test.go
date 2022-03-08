@@ -130,112 +130,115 @@ func TestSingleLineCodeBlock(t *testing.T) {
 	}
 }
 
-func TestParseDocumentContainingOnlyH1Element(t *testing.T) {
-	doc := `# Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H1{
-				Value: "Header",
+func TestATXHeadings(t *testing.T) {
+	docs := []string{
+		`# foo`,
+		`## foo`,
+		`### foo`,
+		`#### foo`,
+		`##### foo`,
+		`###### foo`,
+		`#             foo            `,
+	}
+	expected := []*element.Doc{
+		{
+			Nodes: []element.Element{
+				element.H1{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H2{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H3{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H4{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H5{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H6{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H1{
+					Value: "foo",
+				},
 			},
 		},
 	}
-
 	p := parser.New()
 
-	result, e := p.Parse(doc)
+	for index, doc := range docs {
+		result, err := p.Parse(doc)
 
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
+		assert.NoError(t, err)
+		assert.Equal(t, expected[index], result)
+	}
 }
 
-func TestParseDocumentContainingOnlyH2Element(t *testing.T) {
-	doc := `## Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H2{
-				Value: "Header",
+func TestNonATXHeadings(t *testing.T) {
+	docs := []string{
+		`####### foo`,
+		`#5 bolt`,
+		`#hashtag`,
+	}
+	expected := []*element.Doc{
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "####### foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "#5 bolt",
+				},
+			},
+		},
+
+		{
+			Nodes: []element.Element{
+				element.P{
+					Value: "#hashtag",
+				},
 			},
 		},
 	}
-
 	p := parser.New()
 
-	result, e := p.Parse(doc)
+	for index, doc := range docs {
+		result, err := p.Parse(doc)
 
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
-}
-
-func TestParseDocumentContainingOnlyH3Element(t *testing.T) {
-	doc := `### Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H3{
-				Value: "Header",
-			},
-		},
+		assert.NoError(t, err)
+		assert.Equal(t, expected[index], result)
 	}
-
-	p := parser.New()
-
-	result, e := p.Parse(doc)
-
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
-}
-
-func TestParseDocumentContainingOnlyH4Element(t *testing.T) {
-	doc := `#### Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H4{
-				Value: "Header",
-			},
-		},
-	}
-
-	p := parser.New()
-
-	result, e := p.Parse(doc)
-
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
-}
-
-func TestParseDocumentContainingOnlyH5Element(t *testing.T) {
-	doc := `##### Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H5{
-				Value: "Header",
-			},
-		},
-	}
-
-	p := parser.New()
-
-	result, e := p.Parse(doc)
-
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
-}
-
-func TestParseDocumentContainingOnlyH6Element(t *testing.T) {
-	doc := `###### Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H6{
-				Value: "Header",
-			},
-		},
-	}
-
-	p := parser.New()
-
-	result, e := p.Parse(doc)
-
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
 }
 
 func TestParseDocumentContainingOnlyBlankLine(t *testing.T) {

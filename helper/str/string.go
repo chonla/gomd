@@ -8,8 +8,8 @@ import (
 type Str string
 
 // Lines
-// Break a string into lines (array of string), with autodetection of newline character.
-func (s Str) Lines() []string {
+// Break a string into lines (array of Str), with autodetection of newline character.
+func (s Str) Lines() []Str {
 	str := string(s)
 	var sArray []string
 	if strings.Contains(str, "\r\n") {
@@ -17,27 +17,33 @@ func (s Str) Lines() []string {
 	} else {
 		sArray = strings.Split(str, "\n")
 	}
-	return sArray
+
+	var result []Str
+	for _, line := range sArray {
+		result = append(result, Str(line))
+	}
+
+	return result
 }
 
 // First
 // Get first n characters of string.
-func (s Str) First(n int) string {
+func (s Str) First(n int) Str {
 	str := string(s)
 	if len(str) < n {
-		return str
+		return s
 	}
-	return str[0:n]
+	return Str(str[0:n])
 }
 
 // From
 // Get substring starting from (n + 1)th character.
-func (s Str) From(n int) string {
+func (s Str) From(n int) Str {
 	str := string(s)
 	if len(str) < n {
-		return ""
+		return Str("")
 	}
-	return str[n:]
+	return Str(str[n:])
 }
 
 // IsBlank
@@ -61,33 +67,52 @@ func (s Str) String() string {
 
 // Trim
 // Remove surrounding whitespace from string
-func (s Str) Trim() string {
+func (s Str) Trim() Str {
 	str := string(s)
-	return strings.TrimSpace(str)
+	return Str(strings.TrimSpace(str))
 }
 
 // Without
 // Remove p from string. If others is provided, remove others too.
-func (s Str) Without(p string, others ...string) string {
+func (s Str) Without(p string, others ...string) Str {
 	str := string(s)
 	result := strings.ReplaceAll(str, p, "")
 	for _, other := range others {
 		result = strings.ReplaceAll(result, other, "")
 	}
-	return result
+	return Str(result)
 }
 
 // Capture
 // Capture a string that matches pattern. If not match, return empty string.
 // If more than one string captured, return first captured.
-func (s Str) Capture(pattern string) string {
+func (s Str) Capture(pattern string) Str {
 	str := string(s)
 	re := regexp.MustCompile(pattern)
 	if s.IsLike(pattern) {
 		m := re.FindStringSubmatch(str)
 		if len(m) > 1 {
-			return m[1]
+			return Str(m[1])
 		}
 	}
-	return ""
+	return Str("")
+}
+
+// Append
+// Append a string and return the result.
+func (s Str) Append(text Str) Str {
+	str := string(s) + string(text)
+	return Str(str)
+}
+
+// IsEmpty
+// Check whether string is empty.
+func (s Str) IsEmpty() bool {
+	return string(s) == ""
+}
+
+// Empty
+// Empty string.
+func (s Str) Empty() Str {
+	return Str("")
 }
