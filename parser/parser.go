@@ -33,17 +33,25 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 				continue
 			}
 
+			// Code Block
+			if l.IsLike(`^ {0,3}\t`) || l.IsLike(`^ {4,}`) {
+				mdDoc.Push(element.CodeBlock{
+					Value: l.Trim(),
+				})
+				continue
+			}
+
 			// Setext H1
 			if l.IsLike(`^=+$`) {
 				if textCarriedOver != "" {
-					mdDoc.Push((element.H1{
+					mdDoc.Push(element.H1{
 						Value: textCarriedOver,
-					}))
+					})
 					textCarriedOver = ""
 				} else {
-					mdDoc.Push((element.P{
+					mdDoc.Push(element.P{
 						Value: l.String(),
-					}))
+					})
 				}
 				continue
 			}
@@ -51,18 +59,18 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			// Setext H2
 			if l.IsLike(`^-+$`) {
 				if textCarriedOver != "" {
-					mdDoc.Push((element.H2{
+					mdDoc.Push(element.H2{
 						Value: textCarriedOver,
-					}))
+					})
 					textCarriedOver = ""
 				} else {
 					if l.IsLike(`^-{3,}$`) {
 						mdDoc.Push(element.Hr{})
 						continue
 					} else {
-						mdDoc.Push((element.P{
+						mdDoc.Push(element.P{
 							Value: l.String(),
-						}))
+						})
 					}
 				}
 				continue
@@ -72,9 +80,9 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			hr := str.Str(l.Without(" ", "\t"))
 			if hr.IsLike(`^\*{3,}$`) || hr.IsLike(`^_{3,}$`) || hr.IsLike(`^-{3,}$`) {
 				if textCarriedOver != "" {
-					mdDoc.Push((element.P{
+					mdDoc.Push(element.P{
 						Value: textCarriedOver,
-					}))
+					})
 					textCarriedOver = ""
 				}
 				mdDoc.Push(element.Hr{})
@@ -93,27 +101,27 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 				})
 				continue
 			}
-			if l.First(4) == "### " {
+			if l.IsLike(`^ {0,3}### `) {
 				mdDoc.Push(element.H3{
-					Value: l.From(4),
+					Value: l.Capture(`^ {0,3}### (.*)`),
 				})
 				continue
 			}
-			if l.First(5) == "#### " {
+			if l.IsLike(`^ {0,3}#### `) {
 				mdDoc.Push(element.H4{
-					Value: l.From(5),
+					Value: l.Capture(`^ {0,3}#### (.*)`),
 				})
 				continue
 			}
-			if l.First(6) == "##### " {
+			if l.IsLike(`^ {0,3}##### `) {
 				mdDoc.Push(element.H5{
-					Value: l.From(6),
+					Value: l.Capture(`^ {0,3}##### (.*)`),
 				})
 				continue
 			}
-			if l.First(7) == "###### " {
+			if l.IsLike(`^ {0,3}###### `) {
 				mdDoc.Push(element.H6{
-					Value: l.From(7),
+					Value: l.Capture(`^ {0,3}###### (.*)`),
 				})
 				continue
 			}

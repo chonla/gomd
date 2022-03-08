@@ -1,8 +1,3 @@
-Test
-Some paragraph
-======
+  - foo
 
-test
----
-
-# test
+    bar

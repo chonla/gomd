@@ -18,7 +18,7 @@ func TestParsingThematicBreaks(t *testing.T) {
 		`   ***`,                                // three-leading spaces
 		`_____________________________________`, // More than 3 characters break
 		` - - -`,                                // Inner spaces
-		"\t-\t-\t-",                             // Inner tabs
+		"-\t-\t-",                               // Inner tabs
 		" **  * ** * ** * **",                   // Inner spaces
 		"-       -       -      -",              // Inner spaces
 		"- - - -     ",                          // Spaces at the end
@@ -103,6 +103,30 @@ func TestParsingNonThematicBreaks(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, expected[index], result)
+	}
+}
+
+func TestSingleLineCodeBlock(t *testing.T) {
+	docs := []string{
+		"\tfoo\tbaz\t\tbim",
+		"  \tfoo\tbaz\t\tbim",
+		"    foo\tbaz\t\tbim",
+	}
+	expected := &element.Doc{
+		Nodes: []element.Element{
+			element.CodeBlock{
+				Value: "foo\tbaz\t\tbim",
+			},
+		},
+	}
+
+	p := parser.New()
+
+	for _, doc := range docs {
+		result, err := p.Parse(doc)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
 	}
 }
 
