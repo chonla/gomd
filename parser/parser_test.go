@@ -139,6 +139,9 @@ func TestATXHeadings(t *testing.T) {
 		`##### foo`,
 		`###### foo`,
 		`#             foo            `,
+		` ### foo`,
+		`  ## foo`,
+		`   # foo`,
 	}
 	expected := []*element.Doc{
 		{
@@ -190,6 +193,27 @@ func TestATXHeadings(t *testing.T) {
 				},
 			},
 		},
+		{
+			Nodes: []element.Element{
+				element.H3{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H2{
+					Value: "foo",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.H1{
+					Value: "foo",
+				},
+			},
+		},
 	}
 	p := parser.New()
 
@@ -206,6 +230,7 @@ func TestNonATXHeadings(t *testing.T) {
 		`####### foo`,
 		`#5 bolt`,
 		`#hashtag`,
+		`    # foo`,
 	}
 	expected := []*element.Doc{
 		{
@@ -222,11 +247,17 @@ func TestNonATXHeadings(t *testing.T) {
 				},
 			},
 		},
-
 		{
 			Nodes: []element.Element{
 				element.P{
 					Value: "#hashtag",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				element.CodeBlock{
+					Value: "# foo",
 				},
 			},
 		},
@@ -288,24 +319,6 @@ func TestParseDocumentContainingMultipleBlankLines(t *testing.T) {
 			},
 			element.H2{
 				Value: "Another header 2",
-			},
-		},
-	}
-
-	p := parser.New()
-
-	result, e := p.Parse(doc)
-
-	assert.NoError(t, e)
-	assert.Equal(t, expected, result)
-}
-
-func TestParseDocumentContainingH1ElementWithLeadingSpace(t *testing.T) {
-	doc := `   # Header`
-	expected := &element.Doc{
-		Nodes: []element.Element{
-			element.H1{
-				Value: "Header",
 			},
 		},
 	}
