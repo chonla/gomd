@@ -1,3 +1,5 @@
 package element
 
-type Element interface{}
+type Element interface {
+	Type() string
+}

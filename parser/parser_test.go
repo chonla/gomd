@@ -26,7 +26,7 @@ func TestParsingThematicBreaks(t *testing.T) {
 	}
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 	p := parser.New()
@@ -52,35 +52,35 @@ func TestParsingNonThematicBreaks(t *testing.T) {
 	expected := []*element.Doc{
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "+++",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "===",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "--",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "**",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "__",
 				},
 			},
@@ -90,7 +90,7 @@ func TestParsingNonThematicBreaks(t *testing.T) {
 		// TODO: More-than-3-spaces thematic break
 		// {
 		// 	Nodes: []element.Element{
-		// 		element.P{
+		// 		&element.P{
 		// 			Value: "Foo\n***",
 		// 		},
 		// 	},
@@ -114,7 +114,7 @@ func TestSingleLineCodeBlock(t *testing.T) {
 	}
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.CodeBlock{
+			&element.CodeBlock{
 				Value: "foo\tbaz\t\tbim",
 			},
 		},
@@ -127,6 +127,46 @@ func TestSingleLineCodeBlock(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
+	}
+}
+
+func TestMultipleLinesCodeBlock(t *testing.T) {
+	docs := []string{
+		"    a simple\n      indented code block",
+		"\ta simple\n      indented code block",
+		// "      a simple\n    indented code block",
+	}
+	expected := []*element.Doc{
+		{
+			Nodes: []element.Element{
+				&element.CodeBlock{
+					Value: "a simple\n  indented code block",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				&element.CodeBlock{
+					Value: "a simple\n  indented code block",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				&element.CodeBlock{
+					Value: "a simple\nindented code block",
+				},
+			},
+		},
+	}
+
+	p := parser.New()
+
+	for index, doc := range docs {
+		result, err := p.Parse(doc)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expected[index], result)
 	}
 }
 
@@ -146,70 +186,70 @@ func TestATXHeadings(t *testing.T) {
 	expected := []*element.Doc{
 		{
 			Nodes: []element.Element{
-				element.H1{
+				&element.H1{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H2{
+				&element.H2{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H3{
+				&element.H3{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H4{
+				&element.H4{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H5{
+				&element.H5{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H6{
+				&element.H6{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H1{
+				&element.H1{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H3{
+				&element.H3{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H2{
+				&element.H2{
 					Value: "foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.H1{
+				&element.H1{
 					Value: "foo",
 				},
 			},
@@ -235,28 +275,28 @@ func TestNonATXHeadings(t *testing.T) {
 	expected := []*element.Doc{
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "####### foo",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "#5 bolt",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.P{
+				&element.P{
 					Value: "#hashtag",
 				},
 			},
 		},
 		{
 			Nodes: []element.Element{
-				element.CodeBlock{
+				&element.CodeBlock{
 					Value: "# foo",
 				},
 			},
@@ -290,10 +330,10 @@ func TestParseDocumentContainingBlankLine(t *testing.T) {
 	doc := "# Header 1\n\n## Header 2"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.H1{
+			&element.H1{
 				Value: "Header 1",
 			},
-			element.H2{
+			&element.H2{
 				Value: "Header 2",
 			},
 		},
@@ -311,13 +351,13 @@ func TestParseDocumentContainingMultipleBlankLines(t *testing.T) {
 	doc := "# Header 1\n\n\n\n## Header 2\n\n## Another header 2"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.H1{
+			&element.H1{
 				Value: "Header 1",
 			},
-			element.H2{
+			&element.H2{
 				Value: "Header 2",
 			},
-			element.H2{
+			&element.H2{
 				Value: "Another header 2",
 			},
 		},
@@ -335,7 +375,7 @@ func TestParseSingleLineParagraph(t *testing.T) {
 	doc := "Lorem Ipsum"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "Lorem Ipsum",
 			},
 		},
@@ -353,7 +393,7 @@ func TestParseMultipleLinesParagraph(t *testing.T) {
 	doc := "Lorem Ipsum\ndolor sit amet"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "Lorem Ipsum dolor sit amet",
 			},
 		},
@@ -371,10 +411,10 @@ func TestParseMultipleParagraph(t *testing.T) {
 	doc := "Lorem Ipsum\n\ndolor sit amet"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "Lorem Ipsum",
 			},
-			element.P{
+			&element.P{
 				Value: "dolor sit amet",
 			},
 		},
@@ -392,7 +432,7 @@ func TestParseDocumentContainingSetextH1Element(t *testing.T) {
 	doc := "Header\n="
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.H1{
+			&element.H1{
 				Value: "Header",
 			},
 		},
@@ -410,7 +450,7 @@ func TestParseDocumentContainingJustEqualSign(t *testing.T) {
 	doc := "="
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "=",
 			},
 		},
@@ -428,7 +468,7 @@ func TestParseDocumentContainingSetextH2Element(t *testing.T) {
 	doc := "Header\n-"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.H2{
+			&element.H2{
 				Value: "Header",
 			},
 		},
@@ -446,7 +486,7 @@ func TestParseDocumentContainingJustDashSign(t *testing.T) {
 	doc := "-"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "-",
 			},
 		},
@@ -464,10 +504,10 @@ func TestParseDocumentContainingSetextH1MixWithDashSignElement(t *testing.T) {
 	doc := "Header\n=\n-"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.H1{
+			&element.H1{
 				Value: "Header",
 			},
-			element.P{
+			&element.P{
 				Value: "-",
 			},
 		},
@@ -485,7 +525,7 @@ func TestThematicBreakWith3Asterisks(t *testing.T) {
 	doc := "***"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -501,7 +541,7 @@ func TestThematicBreakWithLongerThan3Asterisks(t *testing.T) {
 	doc := "****"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -517,7 +557,7 @@ func TestThematicBreakWith3AsterisksAndInnerSpaces(t *testing.T) {
 	doc := " *   *        *"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -533,7 +573,7 @@ func TestThematicBreakWith3Underscores(t *testing.T) {
 	doc := "___"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -549,7 +589,7 @@ func TestThematicBreakWithLongerThan3Underscores(t *testing.T) {
 	doc := "____"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -565,7 +605,7 @@ func TestThematicBreakWith3UnderscoresAndInnerSpaces(t *testing.T) {
 	doc := " _  _       _       "
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -581,7 +621,7 @@ func TestThematicBreakWith3Dashes(t *testing.T) {
 	doc := "---"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -597,7 +637,7 @@ func TestThematicBreakWithLongerThan3Dashes(t *testing.T) {
 	doc := "----"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -613,7 +653,7 @@ func TestThematicBreakWith3DashesAndInnerSpaces(t *testing.T) {
 	doc := " -  -      -    "
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 
@@ -629,10 +669,10 @@ func TestThematicBreakWithCarriedOverText(t *testing.T) {
 	doc := "Header\n-  -      -"
 	expected := &element.Doc{
 		Nodes: []element.Element{
-			element.P{
+			&element.P{
 				Value: "Header",
 			},
-			element.Hr{},
+			&element.Hr{},
 		},
 	}
 

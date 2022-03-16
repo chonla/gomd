@@ -116,3 +116,24 @@ func (s Str) IsEmpty() bool {
 func (s Str) Empty() Str {
 	return Str("")
 }
+
+// Replace
+// Replace all occurences of old in s with new string.
+func (s Str) Replace(old, new string) Str {
+	return Str(strings.ReplaceAll(string(s), old, new))
+}
+
+// Len
+// String length.
+func (s Str) Len() int {
+	return len(string(s))
+}
+
+// Repeat
+// Repeat string n times. If n is zero or less, return empty string.
+func (s Str) Repeat(n int) Str {
+	if n <= 0 {
+		return s.Empty()
+	}
+	return Str(strings.Repeat(string(s), n))
+}

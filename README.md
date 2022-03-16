@@ -12,10 +12,11 @@ Markdown parser library fo Golang.
     * ~~ATX Parsing~~
     * ~~Setext H1 Parsing~~
     * ~~Setext H2 Parsing~~
+    * Indented Code Block Parsing
+    * Fence Code Block Parsing
 * Uncategorized
     * ~~Skip blank lines~~
     * ~~Paragraph Parsing~~
-    * Code block Parsing
     * Bullets Parsing
 
 ## References

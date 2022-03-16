@@ -225,3 +225,53 @@ func TestNotIsEmpty(t *testing.T) {
 
 	assert.False(t, text.IsEmpty())
 }
+
+func TestReplace(t *testing.T) {
+	text := str.Str("simple text")
+
+	expected := str.Str("simplest test")
+
+	result := text.Replace(" ", "st ").Replace("x", "s")
+
+	assert.Equal(t, expected, result)
+}
+
+func TestLen(t *testing.T) {
+	text := str.Str("simple text")
+
+	expected := 11
+
+	result := text.Len()
+
+	assert.Equal(t, expected, result)
+}
+
+func TestRepeatWithPositive(t *testing.T) {
+	text := str.Str("simple text")
+
+	expected := str.Str("simple textsimple textsimple text")
+
+	result := text.Repeat(3)
+
+	assert.Equal(t, expected, result)
+}
+
+func TestRepeatWithZero(t *testing.T) {
+	text := str.Str("simple text")
+
+	expected := str.Str("")
+
+	result := text.Repeat(0)
+
+	assert.Equal(t, expected, result)
+}
+
+func TestRepeatWithNegative(t *testing.T) {
+	text := str.Str("simple text")
+
+	expected := str.Str("")
+
+	result := text.Repeat(-1)
+
+	assert.Equal(t, expected, result)
+}

@@ -4,3 +4,7 @@ package element
 type P struct {
 	Value string
 }
+
+func (P) Type() string {
+	return "P"
+}
