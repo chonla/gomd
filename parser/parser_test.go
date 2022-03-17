@@ -134,7 +134,8 @@ func TestMultipleLinesCodeBlock(t *testing.T) {
 	docs := []string{
 		"    a simple\n      indented code block",
 		"\ta simple\n      indented code block",
-		// "      a simple\n    indented code block",
+		"      a simple\n    indented code block",
+		// "    chunk1\n\nchunk2\n  \n \n \n    chunk3",
 	}
 	expected := []*element.Doc{
 		{
@@ -154,7 +155,14 @@ func TestMultipleLinesCodeBlock(t *testing.T) {
 		{
 			Nodes: []element.Element{
 				&element.CodeBlock{
-					Value: "a simple\nindented code block",
+					Value: "  a simple\nindented code block",
+				},
+			},
+		},
+		{
+			Nodes: []element.Element{
+				&element.CodeBlock{
+					Value: "chunk1\n\nchunk2\n\n\n\nchunk3",
 				},
 			},
 		},

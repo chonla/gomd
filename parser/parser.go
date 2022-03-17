@@ -6,7 +6,10 @@ import (
 	"gomd/helper/str"
 )
 
-const TabSize = 4
+const (
+	TabSize             = 4
+	CodeBlockIndentSize = 4
+)
 
 type Parser struct{}
 
@@ -19,7 +22,6 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 	multilineProcess := false
 	mdDoc := element.NewDoc()
 	textCarriedOver := str.Str("")
-	indentCodeBlockSize := 0
 
 	for _, line := range lines {
 		if multilineProcess {
@@ -38,20 +40,17 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 			}
 
 			// Indented Code Block
-			if l.IsLike(`^ {0,3}\t`) || l.IsLike(`^ {4,}`) || l.IsLike(`^\t`) {
-				indentSize := l.Capture(`^(\s+)`).Replace("\t", str.Str(" ").Repeat(TabSize).String()).Len()
+			if l.IsLike(`^ {0,3}\t`) || l.IsLike(`^ {4}`) || l.IsLike(`^\t`) {
+				l1 := l.ReplaceRegex(`^( {0,3}\t| {4}|\t)`, "    ")
 				if mdDoc.Last() != nil && mdDoc.Last().Type() == "CodeBlock" {
 					// merge to previous code block
-					indentDiff := indentSize - indentCodeBlockSize
-
 					codeBlock := mdDoc.Pop().(*element.CodeBlock)
-					codeBlock.Value = fmt.Sprintf("%s\n%s%s", codeBlock.Value, str.Str(" ").Repeat(indentDiff).String(), l.Trim().String())
+					codeBlock.Value = fmt.Sprintf("%s\n%s", codeBlock.Value, l1.From(4).String())
 
 					mdDoc.Push(codeBlock)
 				} else {
-					indentCodeBlockSize = indentSize
 					mdDoc.Push(&element.CodeBlock{
-						Value: l.Trim().String(),
+						Value: l1.From(4).String(),
 					})
 				}
 				continue

@@ -123,6 +123,13 @@ func (s Str) Replace(old, new string) Str {
 	return Str(strings.ReplaceAll(string(s), old, new))
 }
 
+// ReplaceRegex
+// ReplaceRegex all occurences of old (regex pattern) in s with new string.
+func (s Str) ReplaceRegex(pat, new string) Str {
+	pattern := regexp.MustCompile(pat)
+	return Str(pattern.ReplaceAllString(string(s), new))
+}
+
 // Len
 // String length.
 func (s Str) Len() int {

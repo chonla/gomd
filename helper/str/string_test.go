@@ -236,6 +236,16 @@ func TestReplace(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
+func TestReplaceRegex(t *testing.T) {
+	text := str.Str("simple     text")
+
+	expected := str.Str("simplest test")
+
+	result := text.ReplaceRegex(`\s+`, "st ").ReplaceRegex(`x`, "s")
+
+	assert.Equal(t, expected, result)
+}
+
 func TestLen(t *testing.T) {
 	text := str.Str("simple text")
 
