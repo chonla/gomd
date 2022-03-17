@@ -36,6 +36,7 @@ func (p *Parser) Parse(doc string) (*element.Doc, error) {
 					})
 					textCarriedOver = textCarriedOver.Empty()
 				}
+				mdDoc.Push(&element.BlankLine{})
 				continue
 			}
 

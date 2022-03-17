@@ -323,7 +323,9 @@ func TestNonATXHeadings(t *testing.T) {
 func TestParseDocumentContainingOnlyBlankLine(t *testing.T) {
 	doc := ``
 	expected := &element.Doc{
-		Nodes: []element.Element{},
+		Nodes: []element.Element{
+			&element.BlankLine{},
+		},
 	}
 
 	p := parser.New()
@@ -341,6 +343,7 @@ func TestParseDocumentContainingBlankLine(t *testing.T) {
 			&element.H1{
 				Value: "Header 1",
 			},
+			&element.BlankLine{},
 			&element.H2{
 				Value: "Header 2",
 			},
@@ -362,9 +365,13 @@ func TestParseDocumentContainingMultipleBlankLines(t *testing.T) {
 			&element.H1{
 				Value: "Header 1",
 			},
+			&element.BlankLine{},
+			&element.BlankLine{},
+			&element.BlankLine{},
 			&element.H2{
 				Value: "Header 2",
 			},
+			&element.BlankLine{},
 			&element.H2{
 				Value: "Another header 2",
 			},
@@ -422,6 +429,7 @@ func TestParseMultipleParagraph(t *testing.T) {
 			&element.P{
 				Value: "Lorem Ipsum",
 			},
+			&element.BlankLine{},
 			&element.P{
 				Value: "dolor sit amet",
 			},
