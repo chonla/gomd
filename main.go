@@ -10,7 +10,7 @@ import (
 
 func main() {
 	rd := reader.New()
-	lines, e := rd.ReadTextFile("./examples/md/example-2.md")
+	lines, e := rd.ReadTextFile("./examples/md/example-3.md")
 	if e != nil {
 		fmt.Println(e)
 	}

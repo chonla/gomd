@@ -1,6 +1,7 @@
 package types
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/samber/lo"
@@ -30,4 +31,11 @@ func (s Str) StartsWith(otherString string) bool {
 // Returns true if this string is empty, otherwise return false.
 func (s Str) IsEmpty() bool {
 	return string(s) == ""
+}
+
+// LooksLike
+// Returns true if this string matches with otherString, otherwise return false.
+func (s Str) LooksLike(pattern string) bool {
+	rx := regexp.MustCompile(pattern)
+	return rx.MatchString(string(s))
 }

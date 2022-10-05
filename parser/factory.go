@@ -7,9 +7,14 @@ import (
 )
 
 var elementTesters = []types.ElementTesterFunc{
+	doc.TryCodeBlock,
 	doc.TryH1,
 	doc.TryH2,
 	doc.TryH3,
+	doc.TryH4,
+	doc.TryH5,
+	doc.TryH6,
+	doc.TryLi,
 	doc.TryParagraph,
 	doc.TryEmpty,
 }
