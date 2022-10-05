@@ -14,6 +14,7 @@ var elementTesters = []types.ElementTesterFunc{
 	doc.TryH4,
 	doc.TryH5,
 	doc.TryH6,
+	doc.TryBreak,
 	doc.TryLi,
 	doc.TryParagraph,
 	doc.TryEmpty,
