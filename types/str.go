@@ -39,3 +39,8 @@ func (s Str) LooksLike(pattern string) bool {
 	rx := regexp.MustCompile(pattern)
 	return rx.MatchString(string(s))
 }
+
+func (s Str) ReplaceLike(pattern string, withText string) Str {
+	rx := regexp.MustCompile(pattern)
+	return Str(rx.ReplaceAllString(string(s), withText))
+}

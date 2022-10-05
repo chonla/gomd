@@ -14,11 +14,11 @@ func New() *Reader {
 }
 
 // ReadTextFile
-// Reads given text file and returns lines as array of string
-func (r *Reader) ReadTextFile(fileName string) ([]types.Str, error) {
+// Reads given text file and returns data
+func (r *Reader) ReadTextFile(fileName string) (types.Str, error) {
 	data, e := os.ReadFile(fileName)
 	if e != nil {
-		return nil, e
+		return types.Str(""), e
 	}
 
 	var dataWithoutBOM []byte
@@ -30,5 +30,5 @@ func (r *Reader) ReadTextFile(fileName string) ([]types.Str, error) {
 
 	dataAsString := str.FromBytes(dataWithoutBOM)
 
-	return dataAsString.ToLines(), nil
+	return dataAsString, nil
 }

@@ -1,8 +1,10 @@
-# gomd - Markdown Parser
+gomd - Markdown Parser
+====
 
 Markdown parser library fo Golang.
 
-## TODO List
+TODO List
+----
 
 * Leaf Blocks
     * ~~Thematic Breaks Parsing~~

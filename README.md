@@ -10,8 +10,8 @@ Markdown parser library fo Golang.
         * ~~Asterisks~~
         * ~~Dashes~~
         * ~~Underscores~~
-    * Setext H1 Parsing
-    * Setext H2 Parsing
+    * ~Setext H1 Parsing~
+    * ~Setext H2 Parsing~
     * Indented Code Block Parsing
     * Fence Code Block Parsing
 * Container Blocks

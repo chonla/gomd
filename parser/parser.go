@@ -7,8 +7,9 @@ import (
 	"gomd/types"
 )
 
-func Parse(lines []types.Str) (*doc.Document, error) {
-	factory := newFactory(lines)
+func Parse(data types.Str) (*doc.Document, error) {
+	processed := Preprocess(data)
+	factory := newFactory(processed.ToLines())
 	mddoc := doc.NewDocument()
 
 	for element, e := factory.Unshift(); !errors.Is(e, err.ErrEndOfFile); element, e = factory.Unshift() {
