@@ -3,7 +3,6 @@ package reader
 import (
 	"bytes"
 	"gomd/types"
-	"gomd/types/str"
 	"os"
 )
 
@@ -28,7 +27,7 @@ func (r *Reader) ReadTextFile(fileName string) (types.Str, error) {
 		dataWithoutBOM = data
 	}
 
-	dataAsString := str.FromBytes(dataWithoutBOM)
+	dataAsString := types.Str(dataWithoutBOM)
 
 	return dataAsString, nil
 }

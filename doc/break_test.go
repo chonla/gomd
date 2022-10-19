@@ -11,12 +11,12 @@ import (
 
 func TestBreak(t *testing.T) {
 	breaks := []string{
-		"***",
-		"---",
-		"___",
-		" ***",
-		"  ***",
-		"   ***",
+		"***",    // Example 43
+		"---",    // Example 43
+		"___",    // Example 43
+		" ***",   // Example 47
+		"  ***",  // Example 47
+		"   ***", // Example 47
 		"   *** ",
 		"   ****",
 		"   ***\t",
@@ -24,11 +24,11 @@ func TestBreak(t *testing.T) {
 		"   ----",
 		"   ___",
 		"   ____",
-		"_____________________________________",
-		" - - -",
-		" **  * ** * ** * **",
-		"-     -      -      -",
-		"- - - -    ",
+		"_____________________________________", // Example 50
+		" - - -",                                // Example 51
+		" **  * ** * ** * **",                   // Example 52
+		"-     -      -      -",                 // Example 53
+		"- - - -    ",                           // Example 54
 	}
 
 	for _, line := range breaks {
@@ -44,16 +44,16 @@ func TestBreak(t *testing.T) {
 
 func TestNotABreak(t *testing.T) {
 	notABreaks := []string{
-		"+++",
-		"===",
-		"--",
-		"**",
-		"__",
-		"    ***",
-		"_ _ _ _ a",
-		"a------",
-		"---a---",
-		" *-*",
+		"+++",       // Example 44
+		"===",       // Example 45
+		"--",        // Example 46
+		"**",        // Example 46
+		"__",        // Example 46
+		"    ***",   // Example 48
+		"_ _ _ _ a", // Example 55
+		"a------",   // Example 55
+		"---a---",   // Example 55
+		" *-*",      // Example 56
 	}
 
 	for _, line := range notABreaks {

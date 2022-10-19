@@ -18,9 +18,9 @@ func (e H2Element) TypeName() string {
 }
 
 func TryH2(lines []types.Str) (types.AnyElement, []types.Str, error) {
-	if lines[0].StartsWith("## ") {
+	if captured, found := lines[0].Capture(`^ {0,3}## (.+)$`); found {
 		return H2Element{
-			Value: lines[0][3:],
+			Value: captured[0].Trim(),
 		}, lines[1:], nil
 	}
 	return nil, lines, err.ErrElementNotMatch

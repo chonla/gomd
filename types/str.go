@@ -44,3 +44,24 @@ func (s Str) ReplaceLike(pattern string, withText string) Str {
 	rx := regexp.MustCompile(pattern)
 	return Str(rx.ReplaceAllString(string(s), withText))
 }
+
+// Capture
+// Returns captured element from regular expression and true if substring can be captured from pattern.
+// Otherwise returns nil with false.
+func (s Str) Capture(pattern string) ([]Str, bool) {
+	rx := regexp.MustCompile(pattern)
+	matches := rx.FindStringSubmatch(string(s))
+	if len(matches) == 0 {
+		return nil, false
+	}
+	captured := lo.Map(matches[1:], func(elem string, _ int) Str {
+		return Str(elem)
+	})
+	return captured, true
+}
+
+// Trim
+// Trims surrounding whitespaces
+func (s Str) Trim() Str {
+	return Str(strings.TrimSpace(string(s)))
+}

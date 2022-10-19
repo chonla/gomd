@@ -18,9 +18,9 @@ func (e H5Element) TypeName() string {
 }
 
 func TryH5(lines []types.Str) (types.AnyElement, []types.Str, error) {
-	if lines[0].StartsWith("##### ") {
+	if captured, found := lines[0].Capture(`^ {0,3}##### (.+)$`); found {
 		return H5Element{
-			Value: lines[0][6:],
+			Value: captured[0].Trim(),
 		}, lines[1:], nil
 	}
 	return nil, lines, err.ErrElementNotMatch
