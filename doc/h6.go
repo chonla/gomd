@@ -18,7 +18,13 @@ func (e H6Element) TypeName() string {
 }
 
 func TryH6(lines []types.Str) (types.AnyElement, []types.Str, error) {
-	if captured, found := lines[0].RTrim().Capture(`^ {0,3}###### (.+?)( #*)?$`); found {
+	line := lines[0].RTrim()
+	if line.LooksLike(`^ {0,3}######( +#*)?$`) {
+		return H6Element{
+			Value: "",
+		}, lines[1:], nil
+	}
+	if captured, found := line.Capture(`^ {0,3}###### (.+?)( #*)?$`); found {
 		return H6Element{
 			Value: captured[0].Trim(),
 		}, lines[1:], nil
