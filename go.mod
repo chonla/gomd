@@ -1,6 +1,6 @@
 module gomd
 
-go 1.19
+go 1.20
 
 require (
 	github.com/kr/pretty v0.3.0
