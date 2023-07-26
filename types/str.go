@@ -3,6 +3,7 @@ package types
 import (
 	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/samber/lo"
 )
@@ -64,4 +65,10 @@ func (s Str) Capture(pattern string) ([]Str, bool) {
 // Trims surrounding whitespaces
 func (s Str) Trim() Str {
 	return Str(strings.TrimSpace(string(s)))
+}
+
+// RTrim
+// Trims ending whitespaces
+func (s Str) RTrim() Str {
+	return Str(strings.TrimRightFunc(string(s), unicode.IsSpace))
 }

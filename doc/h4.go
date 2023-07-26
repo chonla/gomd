@@ -18,7 +18,7 @@ func (e H4Element) TypeName() string {
 }
 
 func TryH4(lines []types.Str) (types.AnyElement, []types.Str, error) {
-	if captured, found := lines[0].Capture(`^ {0,3}#### (.+)$`); found {
+	if captured, found := lines[0].RTrim().Capture(`^ {0,3}#### (.+?)( #*)?$`); found {
 		return H4Element{
 			Value: captured[0].Trim(),
 		}, lines[1:], nil

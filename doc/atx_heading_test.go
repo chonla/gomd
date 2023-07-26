@@ -19,9 +19,16 @@ func TestATXHeadings(t *testing.T) {
 		"###### foo",            // Example 62
 		"# foo *bar* \\*baz\\*", // Example 66
 		"#                  foo                     ", // Example 67
-		" ### foo", // Example 68
-		"  ## foo", // Example 68
-		"   # foo", // Example 68
+		" ### foo",           // Example 68
+		"  ## foo",           // Example 68
+		"   # foo",           // Example 68
+		"## foo ##",          // Example 71
+		"  ###   bar    ###", // Example 71
+		"# foo ##################################", // Example 72
+		"##### foo ##",     // Example 72
+		"### foo ###     ", // Example 73
+		"### foo ### b",    // Example 74
+		"# foo#",           // Example 75
 	}
 
 	elements := []types.AnyElement{
@@ -57,6 +64,27 @@ func TestATXHeadings(t *testing.T) {
 		},
 		doc.H1Element{
 			Value: "foo",
+		},
+		doc.H2Element{
+			Value: "foo",
+		},
+		doc.H3Element{
+			Value: "bar",
+		},
+		doc.H1Element{
+			Value: "foo",
+		},
+		doc.H5Element{
+			Value: "foo",
+		},
+		doc.H3Element{
+			Value: "foo",
+		},
+		doc.H3Element{
+			Value: "foo ### b",
+		},
+		doc.H1Element{
+			Value: "foo#",
 		},
 	}
 
