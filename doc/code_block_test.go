@@ -10,10 +10,30 @@ import (
 
 func TestCodeBlock(t *testing.T) {
 	headings := []string{
-		"    # foo", // Example 69
+		"\tfoo\tbaz\t\tbim",   // Example 1
+		"  \tfoo\tbaz\t\tbim", // Example 2
+		"    a\ta",            // Example 3
+		"    ὐ\ta",            // Example 3
+		"\t\tbar",             // Example 5
+		"    # foo",           // Example 69
 	}
 
 	elements := []types.AnyElement{
+		doc.CodeBlockElement{
+			Value: "foo\tbaz\t\tbim",
+		},
+		doc.CodeBlockElement{
+			Value: "foo\tbaz\t\tbim",
+		},
+		doc.CodeBlockElement{
+			Value: "a\ta",
+		},
+		doc.CodeBlockElement{
+			Value: "ὐ\ta",
+		},
+		doc.CodeBlockElement{
+			Value: "  bar",
+		},
 		doc.CodeBlockElement{
 			Value: "# foo",
 		},
