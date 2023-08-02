@@ -16,5 +16,7 @@ func Parse(data types.Str) (*doc.Document, error) {
 		mddoc.AppendElement(element)
 	}
 
-	return mddoc, nil
+	cleanDoc := Postprocess(mddoc)
+
+	return cleanDoc, nil
 }
