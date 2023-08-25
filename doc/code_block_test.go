@@ -9,7 +9,7 @@ import (
 )
 
 func TestCodeBlock(t *testing.T) {
-	headings := []string{
+	codeblocks := []string{
 		"\tfoo\tbaz\t\tbim",   // Example 1
 		"  \tfoo\tbaz\t\tbim", // Example 2
 		"    a\ta",            // Example 3
@@ -32,14 +32,14 @@ func TestCodeBlock(t *testing.T) {
 			Value: "ὐ\ta",
 		},
 		doc.CodeBlockElement{
-			Value: "  bar",
+			Value: "bar",
 		},
 		doc.CodeBlockElement{
 			Value: "# foo",
 		},
 	}
 
-	for i, line := range headings {
+	for i, line := range codeblocks {
 		elem, remainder, e := doc.TryCodeBlock([]types.Str{
 			types.Str(line),
 		})

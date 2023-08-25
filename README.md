@@ -12,7 +12,7 @@ Markdown parser library fo Golang.
         * ~~Underscores~~
     * ~~Setext H1 Parsing~~
     * ~~Setext H2 Parsing~~
-    * Indented Code Block Parsing
+    * ~~Indented Code Block Parsing~~
     * Fence Code Block Parsing
 * Container Blocks
 * Uncategorized
